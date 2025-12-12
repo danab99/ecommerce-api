@@ -179,6 +179,35 @@ public class PedidoService {
         return pedido.calcularTotal();
     }
 
+    public String obtenerResumenPedido(int pedidoId) {
+        Pedido pedido = obtenerPorId(pedidoId);
+
+        if (pedido == null) {
+            return "Pedido no encontrado";
+        }
+
+        StringBuilder resumen = new StringBuilder();
+        resumen.append("PEDIDO #").append(pedido.getId()).append("\n");
+        resumen.append("Cliente: ").append(pedido.getClienteNombre()).append("\n");
+        resumen.append("Fecha: ").append(pedido.getFecha()).append("\n");
+        resumen.append("Estado: ").append(pedido.getEstado()).append("\n\n");
+        resumen.append("Productos:\n");
+
+        int numeroLinea = 1;
+        for (LineaPedido linea : pedido.getLineas()) {
+            resumen.append(numeroLinea).append(". ")
+                    .append(linea.getProducto().getNombre())
+                    .append(" x ").append(linea.getCantidad())
+                    .append(" = $").append(linea.calcularSubtotal())
+                    .append("\n");
+            numeroLinea = numeroLinea + 1;
+        }
+
+        resumen.append("\nTOTAL: $").append(pedido.calcularTotal());
+
+        return resumen.toString();
+    }
+
     public Pedido cancelarPedido(int pedidoId) {
         Pedido pedido = obtenerPorId(pedidoId);
 

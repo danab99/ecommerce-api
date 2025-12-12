@@ -189,6 +189,20 @@ public class PedidoController {
     }
 
     /**
+     * GET /api/pedidos/{id}/resumen
+     */
+    @GetMapping("/{id}/resumen")
+    public ResponseEntity<?> obtenerResumen(@PathVariable int id) {
+        String resumen = pedidoService.obtenerResumenPedido(id);
+
+        if (resumen.equals("Pedido no encontrado")) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(Map.of("resumen", resumen));
+    }
+
+    /**
      * POST /api/pedidos/{id}/cancelar
      */
     @PostMapping("/{id}/cancelar")
